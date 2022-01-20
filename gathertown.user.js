@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://gather.town/app/*/*
 // @grant       none
-// @version     1.3
+// @version     1.3.1
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
@@ -203,7 +203,7 @@ GM_addStyle(`
   .dropdownButtonContainer .dropdownContent a:hover {
     background-color: #f1f1f1
   }
-  .dropdownButtonContainer:hover .dropdownContent {
+  .teleportButton:hover + .dropdownContent {
     display: block;
   }
 `)
