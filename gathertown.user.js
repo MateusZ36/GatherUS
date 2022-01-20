@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://gather.town/app/*/*
 // @grant       none
-// @version     1.2.3
+// @version     1.3
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
@@ -158,63 +158,98 @@ function GM_addStyle (cssStr) {
     var targ    = D.getElementsByTagName ('head')[0] || D.body || D.documentElement;
     targ.appendChild (newNode);
 }
-GM_addStyle(
-'.dropbtn { \
-  background-color: #4CAF50; \
-  color: white; \
-  padding: 16px; \
-  font-size: 16px; \
-  border: none; \
-  cursor: pointer; \
-} \
-.dropdownTeleport { \
-  position: relative; \
-  display: none; \
-  z-index: 2; \
-} \
-.dropdown-content { \
-  display: none; \
-  position: absolute; \
-  background-color: #f9f9f9; \
-  min-width: 160px; \
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); \
-  z-index: 1; \
-  top: 10%; \
-  left: 100%; \
-} \
-.dropdown-content a { \
-  color: black; \
-  padding: 12px 16px; \
-  text-decoration: none; \
-  display: block; \
-} \
-.dropdown-content a:hover {background-color: #f1f1f1} \
-.dropdownTeleport:hover .dropdown-content { \
-  display: block; \
-} \
-.dropdownTeleport:hover .dropbtn { \
-  background-color: #3e8e41; \
-} \
-.HiddenOptions:hover .dropdownTeleport{ \
-  display: inline-block; \
-}'
-)
+GM_addStyle(`
+  .dropdownButtonContainer {
+    position: relative;
+  }
+  .dropdownButtonContainer .hiddenButtons {
+    color: white;
+    padding: 8px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  .dropdownButtonContainer:hover .hiddenButtons {
+    filter:brightness(0.8);
+  }
+  .teleportButton {
+    background-color: #00A000;
+  }
+  
+  .setDeskButton {
+    background-color:#A00000;
+  }
+  .deskButton {
+    background-color: #0000A0;
+    width: 100%;
+  }
 
-dropdownDiv = document.createElement("div");
-dropdownDiv.className = "dropdownTeleport";
+  .dropdownButtonContainer .dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    left: 100%;
+    top: 0;
+  }
+  .dropdownButtonContainer .dropdownContent a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  .dropdownButtonContainer .dropdownContent a:hover {
+    background-color: #f1f1f1
+  }
+  .dropdownButtonContainer:hover .dropdownContent {
+    display: block;
+  }
+`)
+
+hiddenButtonsContainer = document.createElement("div");
+
+teleportContainer = document.createElement("div");
+teleportContainer.className = "dropdownButtonContainer";
 
 dropdownButton = document.createElement("button");
-dropdownButton.className = "dropbtn";
+dropdownButton.className = "hiddenButtons teleportButton";
 dropdownButton.textContent="Teleport"
 dropdownButton.onmouseover = updatePlayersList;
-dropdownDiv.appendChild(dropdownButton);
+teleportContainer.appendChild(dropdownButton);
 
-dropdownDivContent = document.createElement("div");
-dropdownDivContent.className = "dropdown-content";
-dropdownDiv.appendChild(dropdownDivContent);
+teleportDropdownContainerContent = document.createElement("div");
+teleportDropdownContainerContent.className = "dropdownContent";
+teleportContainer.appendChild(teleportDropdownContainerContent);
+
+
+setDeskContainer = document.createElement("div");
+setDeskContainer.className = "dropdownButtonContainer";
+
+setDeskButton = document.createElement("button");
+setDeskButton.className = "hiddenButtons setDeskButton";
+setDeskButton.textContent="Set Desk"
+setDeskButton.onclick = setDesk;
+setDeskContainer.appendChild(setDeskButton);
+
+
+deskContainer = document.createElement("div");
+deskContainer.className = "dropdownButtonContainer";
+
+deskButton = document.createElement("button");
+deskButton.className = "hiddenButtons deskButton";
+deskButton.textContent="Desk"
+deskButton.onclick = desk;
+deskContainer.appendChild(deskButton);
+
+
+hiddenButtonsContainer.appendChild(teleportContainer);
+hiddenButtonsContainer.appendChild(setDeskContainer);
+hiddenButtonsContainer.appendChild(deskContainer);
 
 function updatePlayersList(){
-  dropdownDivContent.replaceChildren([]);
+  teleportDropdownContainerContent.replaceChildren([]);
   var players = getPlayers().sort((a, b) => {return a.name.localeCompare(b.name)});
   players.forEach(
     (player)=>{
@@ -225,7 +260,7 @@ function updatePlayersList(){
         playerElement.onclick = function(event) {
           teleportToPlayer(event.target.getAttribute("playerID"));
         }
-        dropdownDivContent.appendChild(playerElement);
+        teleportDropdownContainerContent.appendChild(playerElement);
       }
     }
 )
@@ -235,8 +270,9 @@ function insertDropdown(){
   console.log("Trying to insert dropdown.");
   root = document.querySelector("#root > div > div > div > div:nth-child(1) > div.Layout >div.Tooltip"); 
   if(root){
-    root.classList.add("HiddenOptions");
-    root.appendChild(dropdownDiv);
+    root = root.parentElement.parentElement;
+    root.children[0].style.marginBottom = "auto";
+    root.insertBefore(hiddenButtonsContainer, root.firstChild);
     clearInterval(DropdownIntervalID);
     console.log("dropdown successfully inserted.")
   } else {
