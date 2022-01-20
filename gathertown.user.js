@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name        Gather Town
 // @namespace   Violentmonkey Scripts
-// @match       https://gather.town/app/*
+// @match       https://gather.town/app/*/*
 // @grant       none
-// @version     1.1
+// @version     1.2
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
@@ -167,9 +167,12 @@ GM_addStyle(
   border: none; \
   cursor: pointer; \
 } \
-.dropdown { \
+.dropdownTeleport { \
   position: relative; \
-  display: inline-block; \
+  display: none; \
+  z-index: 2; \
+  top: -50%; \
+  left: 50%; \
 } \
 .dropdown-content { \
   display: none; \
@@ -178,6 +181,8 @@ GM_addStyle(
   min-width: 160px; \
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); \
   z-index: 1; \
+  top: 10%; \
+  left: 100%; \
 } \
 .dropdown-content a { \
   color: black; \
@@ -186,16 +191,19 @@ GM_addStyle(
   display: block; \
 } \
 .dropdown-content a:hover {background-color: #f1f1f1} \
-.dropdown:hover .dropdown-content { \
+.dropdownTeleport:hover .dropdown-content { \
   display: block; \
 } \
-.dropdown:hover .dropbtn { \
+.dropdownTeleport:hover .dropbtn { \
   background-color: #3e8e41; \
+} \
+.HiddenOptions:hover .dropdownTeleport{ \
+  display: inline-block; \
 }'
 )
 
 dropdownDiv = document.createElement("div");
-dropdownDiv.className = "dropdown";
+dropdownDiv.className = "dropdownTeleport";
 
 dropdownButton = document.createElement("button");
 dropdownButton.className = "dropbtn";
@@ -225,11 +233,15 @@ function updatePlayersList(){
 }
 
 function insertDropdown(){
-  console.log("Trying to insert dropdown");
-  if(document.querySelector("#root > div > div > div > div:nth-child(1) > div.Layout >div.Tooltip")){
-      root = document.querySelector("#root > div > div > div > div");
-      root.insertBefore(dropdownDiv, root.firstChild);
-      clearInterval(DropdownIntervalID);
+  console.log("Trying to insert dropdown.");
+  root = document.querySelector("#root > div > div > div > div:nth-child(1) > div.Layout >div.Tooltip"); 
+  if(root){
+    root.classList.add("HiddenOptions");
+    root.appendChild(dropdownDiv);
+    clearInterval(DropdownIntervalID);
+    console.log("dropdown successfully inserted.")
+  } else {
+    console.log("unable to insert dropdown.")
   }
 }
 
