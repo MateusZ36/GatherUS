@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://gather.town/app/*/*
 // @grant       none
-// @version     1.2
+// @version     1.2.1
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
@@ -171,8 +171,6 @@ GM_addStyle(
   position: relative; \
   display: none; \
   z-index: 2; \
-  top: -50%; \
-  left: 50%; \
 } \
 .dropdown-content { \
   display: none; \
