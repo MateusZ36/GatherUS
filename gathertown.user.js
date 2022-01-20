@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://gather.town/app/*/*
 // @grant       none
-// @version     1.2.2
+// @version     1.2.3
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
@@ -215,7 +215,7 @@ dropdownDiv.appendChild(dropdownDivContent);
 
 function updatePlayersList(){
   dropdownDivContent.replaceChildren([]);
-  var players = getPlayers().sort(function (a, b) {return a.name > b.name?1:a.name < b.name?-1:0;});
+  var players = getPlayers().sort((a, b) => {return a.name.localeCompare(b.name)});
   players.forEach(
     (player)=>{
       if(player.name != getPlayer().name){
