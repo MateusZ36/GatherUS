@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://gather.town/app/*/*
 // @grant       none
-// @version     1.3.1
+// @version     1.3.2
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
@@ -203,12 +203,13 @@ GM_addStyle(`
   .dropdownButtonContainer .dropdownContent a:hover {
     background-color: #f1f1f1
   }
-  .teleportButton:hover + .dropdownContent {
+  .dropdownButtonContainer:hover .dropdownContent {
     display: block;
   }
 `)
 
 hiddenButtonsContainer = document.createElement("div");
+hiddenButtonsContainer.hidden=true;
 
 teleportContainer = document.createElement("div");
 teleportContainer.className = "dropdownButtonContainer";
@@ -274,6 +275,11 @@ function insertDropdown(){
     root.children[0].style.marginBottom = "auto";
     root.insertBefore(hiddenButtonsContainer, root.firstChild);
     clearInterval(DropdownIntervalID);
+    document.querySelector(
+      "[data-testid=\"action-bar-emote-item\"]"
+    ).addEventListener("click",(e) => {
+      hiddenButtonsContainer.hidden=!hiddenButtonsContainer.hidden
+    });
     console.log("dropdown successfully inserted.")
   } else {
     console.log("unable to insert dropdown.")
