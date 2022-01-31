@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name        Gather Town
-// @namespace   Violentmonkey Scripts
-// @match       https://gather.town/app/*/*
+// @namespace   https://github.com/MateusZ36
+// @icon        https://gather.town/favicon.ico
 // @grant       GM_addStyle
-// @version     1.3.4
+// @downloadURL https://github.com/MateusZ36/GatherUS/raw/main/gathertown.user.js
+// @match       https://gather.town/app/*/*
 // @author      MateusZ3
+// @version     1.3.5
 // @run-at document-idle
-// @description IDK what to put here
 // ==/UserScript==
 
 unsafeWindow.breakAnkles = breakAnkles;
