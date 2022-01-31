@@ -2,8 +2,8 @@
 // @name        Gather Town
 // @namespace   Violentmonkey Scripts
 // @match       https://gather.town/app/*/*
-// @grant       none
-// @version     1.3.3
+// @grant       GM_addStyle
+// @version     1.3.4
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
@@ -150,14 +150,6 @@ function ring(name) {
   gameSpace.ringUser(player.id)
 }
 
-function GM_addStyle (cssStr) {
-    var D = document;
-    var newNode = D.createElement ('style');
-    newNode.textContent = cssStr;
-
-    var targ    = D.getElementsByTagName ('head')[0] || D.body || D.documentElement;
-    targ.appendChild (newNode);
-}
 GM_addStyle(`
   .dropdownButtonContainer {
     position: relative;
