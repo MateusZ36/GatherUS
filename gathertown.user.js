@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://gather.town/app/*/*
 // @grant       none
-// @version     1.3.2
+// @version     1.3.3
 // @author      MateusZ3
 // @run-at document-idle
 // @description IDK what to put here
