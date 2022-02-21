@@ -7,7 +7,7 @@
 // @match       https://gather.town/app/*/*
 // @match       https://app.gather.town/app/*/*
 // @author      MateusZ3
-// @version     1.3.5
+// @version     1.3.6
 // @run-at document-idle
 // ==/UserScript==
 
