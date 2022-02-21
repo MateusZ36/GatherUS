@@ -5,6 +5,7 @@
 // @grant       GM_addStyle
 // @downloadURL https://github.com/MateusZ36/GatherUS/raw/main/gathertown.user.js
 // @match       https://gather.town/app/*/*
+// @match       https://app.gather.town/app/*/*
 // @author      MateusZ3
 // @version     1.3.5
 // @run-at document-idle
