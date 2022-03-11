@@ -7,7 +7,7 @@
 // @match       https://gather.town/app/*/*
 // @match       https://app.gather.town/app/*/*
 // @author      MateusZ3
-// @version     1.3.6
+// @version     1.3.7
 // @run-at document-idle
 // ==/UserScript==
 
@@ -263,7 +263,7 @@ function updatePlayersList(){
 
 function insertDropdown(){
   console.log("Trying to insert dropdown.");
-  root = document.querySelector("#root > div > div > div > div:nth-child(1) > div.Layout >div.Tooltip"); 
+  root = document.querySelector("div.Tooltip"); 
   if(root){
     root = root.parentElement.parentElement;
     root.children[0].style.marginBottom = "auto";
