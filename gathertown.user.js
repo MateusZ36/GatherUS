@@ -11,18 +11,8 @@
 // @run-at document-idle
 // ==/UserScript==
 
-unsafeWindow.breakAnkles = breakAnkles;
-function breakAnkles(n, delay) {
-  let dim
-  [x, y] = gameSpace.maps[gameSpace.mapId].dimensions
-    dim = { x, y }
-  for (let i = 0; i < n; i++) {
-    setTimeout(() => teleport(Math.round(Math.random() * dim.x), Math.round(Math.random() * dim.y)), (delay ?? 690) * i)
-  }
-}
-
 unsafeWindow.teleport = teleport;
-function teleport(x, y, space) {
+function teleport(x, y, space=null) {
   if (!space)
     space = gameSpace.mapId || undefined;
   game.teleport(space, x, y)
@@ -30,13 +20,13 @@ function teleport(x, y, space) {
 
 unsafeWindow.desk = desk;
 function desk() {
-  const desk = window.localStorage.getItem("desk")
+  const desk = window.localStorage.getItem("desk");
   if (!desk) {
-    console.error("Desk not set use the setDesk() function")
-    return
+    console.error("Desk not set use the setDesk() function");
+    return;
   }
   const { x, y, mapId } = JSON.parse(desk);
-  teleport(x, y, mapId)
+  teleport(x, y, mapId);
 }
 
 unsafeWindow.setDesk = setDesk;
@@ -153,23 +143,6 @@ function setStatus(emote="",emojiStatus="",textStatus=""){
   game.setTextStatus(textStatus);
 }
 
-GM_addStyle(`
-.css-1fs8e8n {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    border: none;
-    background-color: rgb(84, 92, 143);
-    transition: background-color 200ms ease 0s;
-    cursor: pointer;
-}
-`)
-
 function createElementFromHTML(text){
 	let tempDiv = document.createElement("dv");
 	tempDiv.innerHTML = text;
@@ -192,10 +165,56 @@ function createButtonElement(svgText, onClickEvent=null){
 	return rootElement;
 }
 
-let customElementsDiv = createElementFromHTML(`<div class="Layout" style="display: flex; gap: 8px;">`);
+function createCustomStatusElement(svg,title="",onClickEvent=null){
+  let newCustomStatusElement = createElementFromHTML(`
+    <div class="ActionBar-emote-item-container ActionBar-emote-item-container-clear">
+      <div class="ActionBar-emote-item">
+        <span width="24px" color="#ffffff" class="css-1mtu07r">
+          ${svg}
+        </span>
+      </div>
+      <div class="ActionBar-emote-subtext">${title}</div>
+    </div>
+  `);
+  if(onClickEvent)
+    newCustomStatusElement.onclick = onClickEvent;
+  
+  return newCustomStatusElement;
+  
+}
 
-function insertCustomButton(svg,onClick=null){
-  customElementsDiv.appendChild(createButtonElement(svg,onClick))
+let customElementsRoot = createElementFromHTML(`<div class="Layout" style="display: flex; gap: 8px;">`);
+
+let customStatusButton =   createButtonElement(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-labelledby="title" aria-describedby="desc" role="img" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Open Status Menu</title>
+    <desc>A line styled icon from Orion Icon Library.</desc>
+    <circle data-name="layer2" cx="32" cy="32" r="30" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="4" stroke-linejoin="miter" stroke-linecap="round"/>
+    <path data-name="layer1" fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="4" d="M18.9 34h26l-13-16-13 16zM16 42h32" stroke-linejoin="miter" stroke-linecap="round"/>
+  </svg>`
+);
+customStatusButton.classList.add("customStatusRoot");
+
+let customStatusMenu = createElementFromHTML(`
+  <div class="ActionBar-widget customStatusList" data-testid="emotes-widget">
+    <div class="ActionBar-widget-container css-2xuk1o">
+      <div class="Layout" style="display: flex;"/>
+    </div>
+  </div>
+`)
+
+customElementsRoot.appendChild(createElementFromHTML(`<div class="css-s4puqo"/>`));
+customElementsRoot.appendChild(customStatusButton);
+customStatusButton.appendChild(customStatusMenu);
+
+function insertCustomButton(svg,onClickEvent=null){
+  customElementsRoot.appendChild(createButtonElement(svg,onClickEvent))
+}
+
+function insertCustomStatus(svg,title="",onClickEvent=null){
+  customStatusMenu.firstElementChild.firstElementChild.appendChild(
+    createCustomStatusElement(svg,title,onClickEvent)
+  );
 }
 
 function insertDropdown(){
@@ -204,7 +223,28 @@ function insertDropdown(){
       console.log("Could not find root element");
       return;
   }
-  rootElement.insertBefore(customElementsDiv, rootElement.children[1]);
+  rootElement.insertBefore(customElementsRoot, rootElement.children[1]);
+  
+  GM_addStyle(`
+    .css-1fs8e8n {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      justify-content: center;
+      border: none;
+      background-color: rgb(84, 92, 143);
+      transition: background-color 200ms ease 0s;
+      cursor: pointer;
+    }`
+  );
+  GM_addStyle(".customStatusList{display:none}");
+  GM_addStyle(".customStatusRoot:hover .customStatusList{display:block}");
+  GM_addStyle(".customStatusList{display:none}");
+  
   clearInterval(DropdownIntervalID);
   console.log("Finished inserting elements.");
 }
