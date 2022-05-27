@@ -146,31 +146,11 @@ function findPlayer(filter) {
   return selectedPlayer
 }
 
-unsafeWindow.clearStatus = clearStatus;
-function clearStatus(){
-  game.setEmote("");
-  game.setEmojiStatus("");
-  game.setTextStatus("");
-}
-
-function toggleCoffeeTime(){
-  if(getPlayer().emojiStatus)
-    clearStatus();
-  else {
-    //game.setEmote("☕");
-    game.setEmojiStatus("☕");
-    game.setTextStatus("Fazendo café");
-  }
-}
-
-function toggleLunchTime(){
-  if(getPlayer().emojiStatus)
-    clearStatus();
-  else {
-    //game.setEmote("🍔");
-    game.setEmojiStatus("🍔");
-    game.setTextStatus("Almoçando");
-  }
+unsafeWindow.setStatus = setStatus;
+function clearStatus(emote="",emojiStatus="",textStatus=""){
+  game.setEmote(emote);
+  game.setEmojiStatus(emojiStatus);
+  game.setTextStatus(textStatus);
 }
 
 GM_addStyle(`
