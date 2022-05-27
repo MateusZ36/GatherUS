@@ -147,7 +147,7 @@ function findPlayer(filter) {
 }
 
 unsafeWindow.setStatus = setStatus;
-function clearStatus(emote="",emojiStatus="",textStatus=""){
+function setStatus(emote="",emojiStatus="",textStatus=""){
   game.setEmote(emote);
   game.setEmojiStatus(emojiStatus);
   game.setTextStatus(textStatus);
