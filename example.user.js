@@ -8,7 +8,7 @@
 // @author      MateusZ3
 // @version     2.0.0
 // @run-at document-idle
-// @require https://github.com/MateusZ36/GatherUS/raw/tests/gathertown.user.js
+// @require https://github.com/MateusZ36/GatherUS/raw/main/gathertown.user.js
 // ==/UserScript==
 
 customElementsDiv.appendChild(createElementFromHTML(`<div class="css-s4puqo"/>`));
