@@ -8,6 +8,7 @@
 // @author      MateusZ3
 // @version     2.0.1
 // @run-at document-idle
+// @downloadURL https://github.com/MateusZ36/GatherUS/raw/main/example.user.js
 // @require https://github.com/MateusZ36/GatherUS/raw/main/gathertown.user.js
 // ==/UserScript==
 
