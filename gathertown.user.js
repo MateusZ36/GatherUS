@@ -7,7 +7,7 @@
 // @match       https://gather.town/app/*/*
 // @match       https://app.gather.town/app/*/*
 // @author      MateusZ3
-// @version     2.0.1
+// @version     2.0.2
 // @run-at document-idle
 // ==/UserScript==
 
@@ -213,6 +213,10 @@ function createButtonElement(svgText, onClickEvent=null){
 }
 
 let customElementsDiv = createElementFromHTML(`<div class="Layout" style="display: flex; gap: 8px;">`);
+
+function insertCustomButton(svg,onClick=null){
+  customElementsDiv.appendChild(createButtonElement(svg,onClick))
+}
 
 function insertDropdown(){
   var rootElement = document.querySelector("#root > div > div > div > div.css-1i6p38t > div:nth-child(1) > div:nth-child(3)");
